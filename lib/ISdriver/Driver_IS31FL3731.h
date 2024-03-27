@@ -2,6 +2,7 @@
 #define _IS31FL3731_H_
 
 #include <stdio.h>
+#include <string.h>
 #include "hardware/i2c.h"
 #include "pico/stdlib.h"
 

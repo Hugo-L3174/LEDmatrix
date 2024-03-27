@@ -3,7 +3,7 @@
 
 bool initMatrix() {
 
-  // Init battery monitoring pins
+  // active software pull up
   gpio_pull_up(SDA_pin);
   gpio_pull_up(SCL_pin);
 
@@ -75,7 +75,7 @@ void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
 
 /**************************************************************************/
 /*!
-    @brief Adafruit GFX low level accesssor - sets a 8-bit PWM pixel value
+    Sets a 8-bit PWM pixel value
     handles rotation and pixel arrangement, unlike setLEDPWM
     @param x The x position, starting with 0 for left-most side
     @param y The y position, starting with 0 for top-most side
@@ -171,7 +171,6 @@ bool writeRegister8(uint8_t bank, uint8_t reg,
   selectBank(bank);
 
   uint8_t cmd[2] = {reg, data};
-  // return _i2c_dev->write(cmd, 2);
   return i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, cmd, 2, true);
 }
 
@@ -187,44 +186,42 @@ uint8_t readRegister8(uint8_t bank, uint8_t reg) {
   uint8_t val = 0xFF;
 
   selectBank(bank);
-  // _i2c_dev->write_then_read(&reg, 1, &val, 1);
   i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, &reg, 1, true);
   i2c_read_blocking(i2c1, ISSI_ADDR_DEFAULT, &val, 1, true);
-
   return val;
 }
 
 
 
-/*!
- *  @brief  Sends a single command byte over I2C
- *  @param  reg
- *          register address
- *  @param  value
- *          value to write
- */
-void wireWriteRegister(uint8_t reg, uint16_t value) {
+// /*!
+//  *  @brief  Sends a single command byte over I2C
+//  *  @param  reg
+//  *          register address
+//  *  @param  value
+//  *          value to write
+//  */
+// void wireWriteRegister(uint8_t reg, uint16_t value) {
 	
-	uint8_t tmpi[3];
-	tmpi[0] = reg;
-	tmpi[1] = (value >> 8) & 0xFF;
-	tmpi[2] = value & 0xFF;
+// 	uint8_t tmpi[3];
+// 	tmpi[0] = reg;
+// 	tmpi[1] = (value >> 8) & 0xFF;
+// 	tmpi[2] = value & 0xFF;
 	
-	i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, tmpi, 3, true); // true to keep master control of bus
-}
+// 	i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, tmpi, 3, true); // true to keep master control of bus
+// }
 
-/*!
- *  @brief  Reads a single byte over I2C
- *  @param  reg
- *          register address
- *  @param  *value
- *          read value
- */
-void wireReadRegister(uint8_t reg, uint8_t *value) {
+// /*!
+//  *  @brief  Reads a single byte over I2C
+//  *  @param  reg
+//  *          register address
+//  *  @param  *value
+//  *          read value
+//  */
+// void wireReadRegister(uint8_t reg, uint8_t *value) {
 
-	uint8_t tmpi[1];
+// 	uint8_t tmpi[1];
 
-	i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, &reg, 1, true); // true to keep master control of bus
-  i2c_read_blocking(i2c1, ISSI_ADDR_DEFAULT, tmpi, 1, true);
-	*value = tmpi[0];
-}
+// 	i2c_write_blocking(i2c1, ISSI_ADDR_DEFAULT, &reg, 1, true); // true to keep master control of bus
+//   i2c_read_blocking(i2c1, ISSI_ADDR_DEFAULT, tmpi, 1, true);
+// 	*value = tmpi[0];
+// }
